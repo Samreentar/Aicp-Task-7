@@ -1,0 +1,103 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+// Function to display charity names with numbers
+void displayCharities(const std::string& charity1, const std::string& charity2, const std::string& charity3) {
+    std::cout << "Choose a charity:\n";
+    std::cout << "1. " << charity1 << "\n";
+    std::cout << "2. " << charity2 << "\n";
+    std::cout << "3. " << charity3 << "\n";
+}
+
+// Function to display totals in descending order
+void displayTotals(const std::vector<std::pair<std::string, double>>& totals) {
+    std::cout << "Charity Totals (Descending Order):\n";
+    for (const auto& total : totals) {
+        std::cout << total.first << ": $" << total.second << "\n";
+    }
+}
+
+int main() {
+    // Initialization
+    std::string charity1, charity2, charity3;
+    double shoppingBill, donation;
+    int choice;
+    double charityTotal1 = 0.0, charityTotal2 = 0.0, charityTotal3 = 0.0;
+    double grandTotal = 0.0;
+
+    // Input charity names
+    std::cout << "Enter the name of Charity 1: ";
+    std::getline(std::cin, charity1);
+
+    std::cout << "Enter the name of Charity 2: ";
+    std::getline(std::cin, charity2);
+
+    std::cout << "Enter the name of Charity 3: ";
+    std::getline(std::cin, charity3);
+
+    // Vector to store totals for sorting
+    std::vector<std::pair<std::string, double>> charityTotals = {
+        {charity1, charityTotal1},
+        {charity2, charityTotal2},
+        {charity3, charityTotal3}
+    };
+
+    // Input and donation loop
+    while (true) {
+        // Display charity names with numbers
+        displayCharities(charity1, charity2, charity3);
+
+        // Input charity choice
+        std::cout << "Enter your choice (1, 2, 3) or -1 to show totals: ";
+        std::cin >> choice;
+
+        // Check for show totals option
+        if (choice == -1) {
+            // Sort totals in descending order
+            std::sort(charityTotals.begin(), charityTotals.end(),
+                      [](const auto& a, const auto& b) { return a.second > b.second; });
+
+            // Display totals
+            displayTotals(charityTotals);
+
+            // Calculate and display grand total
+            grandTotal = charityTotal1 + charityTotal2 + charityTotal3;
+            std::cout << "GRAND TOTAL DONATED TO CHARITY: $" << grandTotal << "\n";
+
+            break; // Exit the loop
+        }
+
+        // Validate charity choice
+        if (choice < 1 || choice > 3) {
+            std::cout << "Invalid choice. Please choose 1, 2, 3, or -1 to show totals.\n";
+            continue; // Skip the rest of the loop and go to the next iteration
+        }
+
+        // Input shopping bill
+        std::cout << "Enter your shopping bill amount: $";
+        std::cin >> shoppingBill;
+
+        // Calculate donation
+        donation = 0.01 * shoppingBill;
+
+        // Update charity totals
+        switch (choice) {
+            case 1:
+                charityTotal1 += donation;
+                std::cout << "Thank you for your donation of $" << donation << " to " << charity1 << ".\n";
+                break;
+            case 2:
+                charityTotal2 += donation;
+                std::cout << "Thank you for your donation of $" << donation << " to " << charity2 << ".\n";
+                break;
+            case 3:
+                charityTotal3 += donation;
+                std::cout << "Thank you for your donation of $" << donation << " to " << charity3 << ".\n";
+                break;
+        }
+    }
+
+    return 0;
+}
